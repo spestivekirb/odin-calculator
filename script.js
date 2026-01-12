@@ -56,7 +56,15 @@ function updateDisplay(calculator) {
     } else {
         display.textContent = calculator.firstNumber;
     }
-    display.textContent = Number(Number(display.textContent).toPrecision(9));
+
+    if (display.textContent.length > 9) {
+        if (display.textContent.includes('.')) {
+            display.textContent = display.textContent.substring(0,12);
+        } else {
+            display.textContent = display.textContent.substring(0,11);
+
+        }
+    }
 }
 
 digits = document.querySelectorAll(".digit");
