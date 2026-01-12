@@ -131,6 +131,13 @@ for (digit of digits) {
     });
 }
 
+
+function clearSelection() {
+    const operations = document.querySelectorAll(".operator");
+    for (const op of operations) {
+        op.classList.remove("selected");
+    }
+}
 // Operators (non =)
 const operations = document.querySelectorAll(".operator");
 for (op of operations) {
@@ -142,7 +149,11 @@ for (op of operations) {
             if (calculator.result !== undefined) {
                 calculator.firstNumber = calculator.result
                 calculator.result = undefined;
+        
             }
+            clearSelection();
+            e.target.classList.add("selected");
+
 
         // Case: Operator previously selected. Need to evaluate, and set result to first.
         } else {
@@ -159,6 +170,9 @@ for (op of operations) {
                 calculator.secondNumber = undefined;
                 updateDisplay(calculator);
                 calculator.operator = select;
+                clearSelection();
+                e.target.classList.add("selected");
+
             }
             
         }
@@ -179,12 +193,14 @@ evaluate.addEventListener("click", function() {
             calculator.secondNumber = undefined;
             calculator.operator = undefined;
             calculator.result = undefined;
+            clearSelection();
         } else {
             calculator.result = result;
             updateDisplay(calculator);
             calculator.firstNumber = undefined;
             calculator.secondNumber = undefined;
             calculator.operator = undefined;
+            clearSelection();
         }
         
     // General case
@@ -197,12 +213,14 @@ evaluate.addEventListener("click", function() {
             calculator.secondNumber = undefined;
             calculator.operator = undefined;
             calculator.result = undefined;
+            clearSelection();
         } else {
             calculator.result = result;
             updateDisplay(calculator);
             calculator.firstNumber = undefined;
             calculator.secondNumber = undefined;
             calculator.operator = undefined;
+            clearSelection();
         }
     }
 });
@@ -238,3 +256,53 @@ backspace.addEventListener("click", function () {
     updateDisplay(calculator);
 }) 
 
+
+
+// Keyboard input section
+function getButtonFromKey(key) {
+    if (key === "clear") {
+        return document.querySelector("#clear");
+    }
+    if (key === "=") {
+        return document.querySelector("#eq");
+    }
+    if (key === "Backspace") {
+        return document.querySelector("#backspace")
+    }
+    if (key === ".") {
+        return document.querySelector("#decimal");
+    }
+    
+    const digits = document.querySelectorAll(".digit");
+    for (const digit of digits) {
+        if (digit.textContent === key) {
+            return digit;
+        }
+    }
+    const ops = document.querySelectorAll(".operator");
+    for (const e of ops) {
+        if (e.id === key) {
+            return e;
+        }
+    }
+
+
+    return null;
+}
+
+
+document.addEventListener("keydown", function(e) {
+    let key = e.key;
+
+    if (key === "C" || key == "Escape") {
+        key = "clear";
+    }
+    if (key === "Enter") {
+        key = "=";
+    }
+
+    let button = getButtonFromKey(key);
+    if (button){
+        button.click();
+    }
+})
