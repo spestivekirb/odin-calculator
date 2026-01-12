@@ -12,6 +12,9 @@ function multiply(x, y) {
 }
 
 function divide(x, y) {
+    if (y === 0) {
+        return undefined;
+    }
     return x / y;
 }
 
@@ -53,6 +56,7 @@ function updateDisplay(calculator) {
     } else {
         display.textContent = calculator.firstNumber;
     }
+    display.textContent = Number(Number(display.textContent).toPrecision(9));
 }
 
 digits = document.querySelectorAll(".digit");
@@ -63,7 +67,6 @@ for (digit of digits) {
         if (calculator.result !== undefined) {
             calculator.result = undefined;
         }
-
         let number = e.target.textContent;
         // Case: Empty first number.
         if (calculator.firstNumber === undefined) {
@@ -81,12 +84,13 @@ for (digit of digits) {
                 calculator.secondNumber += number;
             }
         }
-        if (calculator.firstNumber === "0") {
-            calculator.firstNumber = undefined;
+        if (calculator.firstNumber !== undefined) {
+                calculator.firstNumber = Number(calculator.firstNumber);
         }
-        if (calculator.secondNumber === "0") {
-            calculator.secondNumber = undefined;
+        if (calculator.secondNumber !== undefined) {
+            calculator.secondNumber = Number(calculator.secondNumber);
         }
+        
         updateDisplay(calculator);
     });
 }
@@ -107,10 +111,20 @@ for (op of operations) {
         // Case: Operator previously selected. Need to evaluate, and set result to first.
         } else {
             let res = operate(calculator.operator, Number(calculator.firstNumber), Number(calculator.secondNumber));
-            calculator.firstNumber = res;
-            calculator.secondNumber = undefined;
-            updateDisplay(calculator);
-            calculator.operator = select;
+            // Divide by zero
+            if (res === undefined) {
+                display.textContent = "Seriously?"
+                calculator.firstNumber = undefined;
+                calculator.secondNumber = undefined;
+                calculator.operator = undefined;
+                calculator.result = undefined;
+            } else {
+                calculator.firstNumber = res;
+                calculator.secondNumber = undefined;
+                updateDisplay(calculator);
+                calculator.operator = select;
+            }
+            
         }
     }) 
 }
@@ -122,19 +136,38 @@ evaluate.addEventListener("click", function() {
     //Case: No second number
     } else if (calculator.secondNumber === undefined) {
         let result = operate(calculator.operator, Number(calculator.firstNumber), Number(calculator.firstNumber));
-        calculator.result = result;
-        updateDisplay(calculator);
-        calculator.firstNumber = undefined;
-        calculator.secondNumber = undefined;
-        calculator.operator = undefined;
+
+        if (result === undefined) {
+            display.textContent = "Seriously?"
+            calculator.firstNumber = undefined;
+            calculator.secondNumber = undefined;
+            calculator.operator = undefined;
+            calculator.result = undefined;
+        } else {
+            calculator.result = result;
+            updateDisplay(calculator);
+            calculator.firstNumber = undefined;
+            calculator.secondNumber = undefined;
+            calculator.operator = undefined;
+        }
+        
     // General case
     } else {
         let result = operate(calculator.operator, Number(calculator.firstNumber), Number(calculator.secondNumber));
-        calculator.result = result;
-        updateDisplay(calculator);
-        calculator.firstNumber = undefined;
-        calculator.secondNumber = undefined;
-        calculator.operator = undefined;
+
+        if (result === undefined) {
+            display.textContent = "Seriously?"
+            calculator.firstNumber = undefined;
+            calculator.secondNumber = undefined;
+            calculator.operator = undefined;
+            calculator.result = undefined;
+        } else {
+            calculator.result = result;
+            updateDisplay(calculator);
+            calculator.firstNumber = undefined;
+            calculator.secondNumber = undefined;
+            calculator.operator = undefined;
+        }
     }
 });
 
