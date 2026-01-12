@@ -43,7 +43,7 @@ const calculator = {
 display = document.querySelector("#display")
 function updateDisplay(calculator) {
     if (calculator.firstNumber === undefined) {
-        display.textConent = 0;
+        display.textContent = 0;
     } else if (calculator.result !== undefined) {
         display.textContent = calculator.result;
     } else if (calculator.secondNumber !== undefined) {
@@ -136,5 +136,14 @@ evaluate.addEventListener("click", function() {
         calculator.secondNumber = undefined;
         calculator.operator = undefined;
     }
+});
+
+const clear = document.querySelector("#clear");
+clear.addEventListener("click", function() {
+    calculator.firstNumber = undefined;
+    calculator.secondNumber = undefined;
+    calculator.operator = undefined;
+    calculator.result = undefined;
+    updateDisplay(calculator);
 });
 
