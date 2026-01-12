@@ -75,6 +75,12 @@ for (digit of digits) {
                 calculator.secondNumber += number;
             }
         }
+        if (calculator.firstNumber === "0") {
+            calculator.firstNumber = undefined;
+        }
+        if (calculator.secondNumber === "0") {
+            calculator.secondNumber = undefined;
+        }
         updateDisplay(calculator);
     });
 }
