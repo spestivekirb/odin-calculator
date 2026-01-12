@@ -32,3 +32,47 @@ function operate(operation, x, y) {
     }
 }
 
+const calculator = {
+    firstNumber: undefined,
+    secondNumber: undefined,
+    result: undefined,
+    operator: undefined,
+    
+}
+
+display = document.querySelector("#display")
+function updateDisplay(calculator) {
+    if (calculator.result !== undefined) {
+        display.textContent = calculator.result;
+    } else if (calculator.secondNumber !== undefined) {
+        display.textContent = calculator.secondNumber;
+    } else {
+        display.textContent = calculator.firstNumber;
+    }
+}
+
+digits = document.querySelectorAll(".digit");
+
+for (digit of digits) {
+    digit.addEventListener("click", function(e) {
+        let number = e.target.textContent;
+        console.log(number);
+        // Case: Empty first number.
+        if (calculator.firstNumber === undefined) {
+            calculator.firstNumber = number;
+
+        // Case: No operator pressed since last reset.
+        } else if (calculator.operator === undefined) {
+            calculator.firstNumber += number;
+
+        //Case: Operator has been pressed at least once since last reset.
+        } else {
+            if (calculator.secondNumber === undefined) {
+                calculator.secondNumber = number;
+            } else {
+                calculator.secondNumber += number;
+            }
+        }
+        updateDisplay(calculator);
+    });
+}
