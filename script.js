@@ -46,6 +46,8 @@ function updateDisplay(calculator) {
         display.textContent = calculator.result;
     } else if (calculator.secondNumber !== undefined) {
         display.textContent = calculator.secondNumber;
+    // } else if (calculator.operator !== undefined) {
+    //     display.textContent = ""
     } else {
         display.textContent = calculator.firstNumber;
     }
@@ -65,7 +67,7 @@ for (digit of digits) {
         } else if (calculator.operator === undefined) {
             calculator.firstNumber += number;
 
-        //Case: Operator has been pressed at least once since last reset.
+        // Case: Operator has been pressed at least once since last reset.
         } else {
             if (calculator.secondNumber === undefined) {
                 calculator.secondNumber = number;
@@ -76,3 +78,22 @@ for (digit of digits) {
         updateDisplay(calculator);
     });
 }
+const operations = document.querySelectorAll(".operator");
+for (op of operations) {
+    op.addEventListener("click", function(e) {
+        select = e.target.id;
+        // Case: Operator never selected.
+        if (calculator.operator === undefined || calculator.secondNumber == undefined) {
+            calculator.operator = select;
+
+        // Case: Operator previously selected. Need to evaluate, and set result to first.
+        } else {
+            let res = operate(calculator.operator, Number(calculator.firstNumber), Number(calculator.secondNumber));
+            calculator.firstNumber = res;
+            calculator.secondNumber = undefined;
+            updateDisplay(calculator);
+            calculator.operator = select;
+        }
+    }) 
+}
+
