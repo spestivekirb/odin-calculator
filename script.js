@@ -42,7 +42,9 @@ const calculator = {
 
 display = document.querySelector("#display")
 function updateDisplay(calculator) {
-    if (calculator.result !== undefined) {
+    if (calculator.firstNumber === undefined) {
+        display.textConent = 0;
+    } else if (calculator.result !== undefined) {
         display.textContent = calculator.result;
     } else if (calculator.secondNumber !== undefined) {
         display.textContent = calculator.secondNumber;
@@ -57,8 +59,12 @@ digits = document.querySelectorAll(".digit");
 
 for (digit of digits) {
     digit.addEventListener("click", function(e) {
+        // Reset calculator if last operation was "="
+        if (calculator.result !== undefined) {
+            calculator.result = undefined;
+        }
+
         let number = e.target.textContent;
-        console.log(number);
         // Case: Empty first number.
         if (calculator.firstNumber === undefined) {
             calculator.firstNumber = number;
@@ -84,6 +90,8 @@ for (digit of digits) {
         updateDisplay(calculator);
     });
 }
+
+// Operators (non =)
 const operations = document.querySelectorAll(".operator");
 for (op of operations) {
     op.addEventListener("click", function(e) {
@@ -91,6 +99,10 @@ for (op of operations) {
         // Case: Operator never selected.
         if (calculator.operator === undefined || calculator.secondNumber == undefined) {
             calculator.operator = select;
+            if (calculator.result !== undefined) {
+                calculator.firstNumber = calculator.result
+                calculator.result = undefined;
+            }
 
         // Case: Operator previously selected. Need to evaluate, and set result to first.
         } else {
@@ -102,4 +114,27 @@ for (op of operations) {
         }
     }) 
 }
+const evaluate = document.querySelector("#eq")
+evaluate.addEventListener("click", function() {
+    // Case: Empty calc or only first num selected
+    if (calculator.firstNumber === undefined || calculator.operator === undefined) {
+            // Do Nothing
+    //Case: No second number
+    } else if (calculator.secondNumber === undefined) {
+        let result = operate(calculator.operator, Number(calculator.firstNumber), Number(calculator.firstNumber));
+        calculator.result = result;
+        updateDisplay(calculator);
+        calculator.firstNumber = undefined;
+        calculator.secondNumber = undefined;
+        calculator.operator = undefined;
+    // General case
+    } else {
+        let result = operate(calculator.operator, Number(calculator.firstNumber), Number(calculator.secondNumber));
+        calculator.result = result;
+        updateDisplay(calculator);
+        calculator.firstNumber = undefined;
+        calculator.secondNumber = undefined;
+        calculator.operator = undefined;
+    }
+});
 
