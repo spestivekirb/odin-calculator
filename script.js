@@ -49,8 +49,12 @@ function updateDisplay(calculator) {
         display.textContent = 0;
     } else if (calculator.result !== undefined) {
         display.textContent = calculator.result;
-    } else if (calculator.secondNumber !== undefined) {
-        display.textContent = calculator.secondNumber;
+    } else if (calculator.operator !== undefined) {
+        if (calculator.secondNumber === undefined) {
+            display.textContent = 0;
+        } else {
+            display.textContent = calculator.secondNumber;
+        }
     // } else if (calculator.operator !== undefined) {
     //     display.textContent = ""
     } else {
@@ -211,4 +215,26 @@ clear.addEventListener("click", function() {
     calculator.result = undefined;
     updateDisplay(calculator);
 });
+
+const backspace = document.querySelector("#backspace");
+backspace.addEventListener("click", function () {
+    // Case: second number blank, should remove last digit of first nubmer IF POSSIBLE.
+    if (calculator.operator === undefined) {
+        if (!(calculator.firstNumber === undefined || String(calculator.firstNumber).length === 1)) {
+            calculator.firstNumber = String(calculator.firstNumber).slice(0, -1);
+        } else if (calculator.firstNumber !== undefined && String(calculator.firstNumber).length === 1) {
+            calculator.firstNumber = undefined;
+        }
+    // Case: delete from second number.
+    } else {
+        if (!(calculator.secondNumber === undefined || String(calculator.secondNumber).length === 1)) {
+            calculator.secondNumber = String(calculator.secondNumber).slice(0, -1);
+        } else if (calculator.secondNumber !== undefined && String(calculator.secondNumber).length === 1) {
+            calculator.secondNumber = undefined;
+        }
+    }
+
+
+    updateDisplay(calculator);
+}) 
 
