@@ -75,29 +75,53 @@ for (digit of digits) {
         if (calculator.result !== undefined) {
             calculator.result = undefined;
         }
-        let number = e.target.textContent;
-        // Case: Empty first number.
-        if (calculator.firstNumber === undefined) {
-            calculator.firstNumber = number;
+        
+        if (e.target.id === "decimal") {
 
-        // Case: No operator pressed since last reset.
-        } else if (calculator.operator === undefined) {
-            calculator.firstNumber += number;
-
-        // Case: Operator has been pressed at least once since last reset.
-        } else {
-            if (calculator.secondNumber === undefined) {
-                calculator.secondNumber = number;
+            if (calculator.firstNumber === undefined) {
+                calculator.firstNumber = "0.";
+            } else if (calculator.operator === undefined) {
+                if (!String(calculator.firstNumber).includes(".")) {
+                    calculator.firstNumber += ".";
+                }
             } else {
-                calculator.secondNumber += number;
+                if (calculator.secondNumber === undefined) {
+                    calculator.secondNumber = "0."
+                } else {
+                    if(!String(calculator.secondNumber).includes(".")) {
+                        calculator.secondNumber += ".";
+
+                    }
+                }
             }
+
+        } else {
+            let number = e.target.textContent;
+            // Case: Empty first number.
+            if (calculator.firstNumber === undefined) {
+                calculator.firstNumber = number;
+
+            // Case: No operator pressed since last reset.
+            } else if (calculator.operator === undefined) {
+                calculator.firstNumber += number;
+
+            // Case: Operator has been pressed at least once since last reset.
+            } else {
+                if (calculator.secondNumber === undefined) {
+                    calculator.secondNumber = number;
+                } else {
+                    calculator.secondNumber += number;
+                }
+            }
+            if (calculator.firstNumber !== undefined) {
+                    calculator.firstNumber = Number(calculator.firstNumber);
+            }
+            if (calculator.secondNumber !== undefined) {
+                calculator.secondNumber = Number(calculator.secondNumber);
+            }
+
         }
-        if (calculator.firstNumber !== undefined) {
-                calculator.firstNumber = Number(calculator.firstNumber);
-        }
-        if (calculator.secondNumber !== undefined) {
-            calculator.secondNumber = Number(calculator.secondNumber);
-        }
+        
         
         updateDisplay(calculator);
     });

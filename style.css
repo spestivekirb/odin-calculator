@@ -35,6 +35,11 @@
     gap: 10px;
 }
 
+.operator {
+    background-color: orange;
+
+}
+
 button {
     flex: 1;
     border-width: 2px;
